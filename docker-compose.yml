@@ -13,3 +13,16 @@ services:
       - ./pgdata:/var/lib/postgresql/data
     ports:
       - ${TYPEORM_PORT}:${TYPEORM_PORT}
+
+  backend:
+    container_name: backend-service
+    build:
+      context: ./vsoft_file_manager_backend
+    depends_on:
+      - db
+    restart: unless-stopped
+    ports:
+      - ${API_PORT}=${API_PORT}
+    environment:
+      - API_PORT=${API_PORT}
+      - TYPEORM_HOST=db
