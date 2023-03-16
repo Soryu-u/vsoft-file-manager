@@ -33,3 +33,7 @@ vsoft_file_manager_backend/.DS_Store
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+/pgdata
+vsoft_file_manager_backend/schema.gql
+vsoft_file_manager_backend/package-lock.json
