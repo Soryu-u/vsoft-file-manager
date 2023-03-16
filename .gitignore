@@ -1,0 +1,35 @@
+# compiled output
+/vsoft_file_manager_backend/dist
+/vsoft_file_manager_backend/node_modules
+
+# Logs
+vsoft_file_manager_backend/logs
+vsoft_file_manager_backend/*.log
+vsoft_file_manager_backend/npm-debug.log*
+vsoft_file_manager_backend/pnpm-debug.log*
+vsoft_file_manager_backend/yarn-debug.log*
+vsoft_file_manager_backend/yarn-error.log*
+vsoft_file_manager_backend/lerna-debug.log*
+
+# OS
+vsoft_file_manager_backend/.DS_Store
+
+# Tests
+/vsoft_file_manager_backend/coverage
+/vsoft_file_manager_backend/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
