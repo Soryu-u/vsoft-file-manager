@@ -12,8 +12,15 @@ export class UserService {
     ) {
     }
 
-    async createUser(userInput: CreateUserInput): Promise<UserEntity> {
-        return await this.userRepository.save({...userInput})
+    async createUser(email: string): Promise<UserEntity> {
+        const checkedUser = await this.userRepository.findOne({ where: {email} });
+        const user = new UserEntity();
+        user.email = email;
+        if (checkedUser) {
+            return checkedUser
+        } else {
+            return this.userRepository.save(user);
+        }
     }
 
     async getOneUser(id: number): Promise<UserEntity> {
