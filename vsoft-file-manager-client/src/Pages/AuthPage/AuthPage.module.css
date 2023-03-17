@@ -1,0 +1,21 @@
+.wrapper {
+    background-color: slategrey;
+    color: white;
+    height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 60vh;
+    width: 30vw;
+    background-color: #37454e;
+    border-radius: 10px;
+    border: 1px #252525 solid;
+}
