@@ -1,11 +1,8 @@
 .wrapper {
-    background-color: slategrey;
-    color: white;
-    height: 100vh;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
 }
 
 .main {

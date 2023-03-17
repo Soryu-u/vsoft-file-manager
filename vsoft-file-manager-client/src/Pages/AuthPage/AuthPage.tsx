@@ -6,16 +6,22 @@ import {googleLogout, useGoogleLogin} from "@react-oauth/google";
 import axios from "axios";
 import instance from "../../utils/axios";
 
+interface IUser {
+    name: string,
+    email: string,
+    picture: string
+}
+
 function AuthPage() {
     const [user, setUser] = useState<any>();
     const [profile, setProfile] = useState<any>();
 
     const login = useGoogleLogin({
-        onSuccess: (codeResponse: any) => setUser(codeResponse),
+        onSuccess: (codeResponse: object) => setUser(codeResponse),
         onError: (error) => console.log('Login Failed:', error)
     });
 
-    const createUser = async (email) => {
+    const createUser = async (email:string) => {
         try {
             const response = await axios.post('http://localhost:5000/graphql', {
                 query: `

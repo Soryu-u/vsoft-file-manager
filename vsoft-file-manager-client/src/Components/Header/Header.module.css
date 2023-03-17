@@ -1,0 +1,51 @@
+.header {
+    padding: 70px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 70px;
+}
+
+.logo {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.logo_image {
+    margin: 0 20px 0 70px;
+    width: 60px;
+    height: 60px;
+}
+
+.logo_text {
+    font-weight: bold;
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.user_bar {
+    height: 100%;
+    margin-right: 50px;
+}
+
+.log_out {
+    height: 100%;
+    width: max-content;
+    padding: 0 20px;
+    margin: 0 20px;
+    border: none;
+    background-color: #a7cdff;
+    color: black;
+
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.log_out:hover {
+    cursor: pointer;
+    background-color: #6787b0;
+    color: white;
+}
