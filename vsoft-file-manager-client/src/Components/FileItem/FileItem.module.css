@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 100px;
+    width: max-content;
+    height: 100px;
+    background-color: aliceblue;
+    color: black;
+    margin: 30px;
+}

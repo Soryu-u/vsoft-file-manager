@@ -1,6 +1,5 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
-// @ts-ignore
 import styles from "./AuthPage.module.css";
 import {googleLogout, useGoogleLogin} from "@react-oauth/google";
 import axios from "axios";

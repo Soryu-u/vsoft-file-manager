@@ -1,5 +1,6 @@
 .main {
     background-color: slategrey;
     color: white;
-    height: 100vh;
+    min-height: 100vh;
+    max-height: 130vh;
 }
