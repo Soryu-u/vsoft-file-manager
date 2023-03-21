@@ -2,10 +2,41 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-width: 100px;
+    min-width: 200px;
     width: max-content;
-    height: 100px;
     background-color: aliceblue;
     color: black;
     margin: 30px;
+    border-radius: 10px;
+}
+
+.header {
+    padding: 5px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+
+    font-size: 18px;
+}
+
+.image {
+    width: 30px;
+    height: 30px;
+}
+
+.menu {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.menu:hover {
+    background-color: #cfd5de;
+}
+
+.container:hover {
+    background-color: #e0e8ef;
+    cursor: default;
 }

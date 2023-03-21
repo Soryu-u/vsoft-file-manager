@@ -1,19 +1,24 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import styles from "./AuthPage.module.css";
 import {googleLogout, useGoogleLogin} from "@react-oauth/google";
 import axios from "axios";
 import instance from "../../utils/axios";
 
-interface IUser {
-    name: string,
-    email: string,
-    picture: string
+export interface IUser {
+    email?: string,
+    family_name?: string,
+    given_name?: string,
+    id?: string,
+    locale?: string,
+    name?: string,
+    picture?: string,
+    verified_email?: boolean,
+    access_token?: string
 }
 
-function AuthPage() {
-    const [user, setUser] = useState<any>();
-    const [profile, setProfile] = useState<any>();
+function AuthPage({setProfile}:any) {
+    const [user, setUser] = useState<IUser>();
 
     const login = useGoogleLogin({
         onSuccess: (codeResponse: object) => setUser(codeResponse),
@@ -63,28 +68,13 @@ function AuthPage() {
         [user]
     );
 
-    const logOut = () => {
-        googleLogout();
-        setProfile(null);
-    };
-
     return (
         <div className={styles.wrapper}>
             <div className={styles.main}>
-                {profile ?
-                    <div>
-                        <img src={profile.picture} alt="user image"/>
-                        <h3>User Logged in</h3>
-                        <p>Name: {profile.name}</p>
-                        <p>Email Address: {profile.email}</p>
-                        <br/>
-                        <br/>
-                        <button onClick={logOut}>Log out</button>
-                    </div> :
                     <div>
                         <h1>Login with Google</h1>
                         <button onClick={() => login()}>login</button>
-                    </div>}
+                    </div>
             </div>
         </div>
     );

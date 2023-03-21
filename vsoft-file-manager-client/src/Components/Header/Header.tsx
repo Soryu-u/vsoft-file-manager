@@ -3,14 +3,27 @@ import styles from "./Header.module.css";
 // @ts-ignore
 import logo from "../../Images/logo.png";
 // @ts-ignore
-import SearchBar from "../SearchBar/SearchBar.tsx";
-import {Dispatch, SetStateAction} from "react";
+import logout from "../../Images/logout.png";
+import SearchBar from "../SearchBar/SearchBar";
+import {Dispatch, SetStateAction, useState} from "react";
+import {googleLogout} from "@react-oauth/google";
+import {IUser} from "../../Pages/AuthPage/AuthPage";
 
 interface ISearch {
-    setInputText: Dispatch<SetStateAction<string>>
+    setInputText: Dispatch<SetStateAction<string>>,
+    props: {
+        profile: IUser,
+        setProfile: Dispatch<SetStateAction<object | null>>
+    },
 }
 
-function Header({setInputText}:ISearch) {
+function Header({setInputText, props}:ISearch) {
+    const [isOpen, setIsOpen] = useState(false);
+    const logOut = () => {
+        googleLogout();
+        props.setProfile(null);
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -21,8 +34,15 @@ function Header({setInputText}:ISearch) {
                     </div>
                 </div>
                 <div className={styles.user_bar}>
-                    zxc@gmail.com
-                    <button className={styles.log_out}>Log Out</button>
+                    <div className={styles.log_out} onClick={ ()=> setIsOpen(!isOpen) }>
+                        {props.profile.email}
+                        <img className={styles.log_outImage} style={isOpen ? {rotate: '180deg'} : {}} src={logout} alt='logout'/>
+                    </div>
+                    {
+                        isOpen && <div className={styles.modal} onClick={logOut}>
+                            Log Out
+                        </div>
+                    }
                 </div>
             </div>
             <SearchBar setInputText={setInputText}/>

@@ -1,41 +1,68 @@
-import * as React from "react";
+import React, {Dispatch, SetStateAction} from "react";
 import styles from "./MainPage.module.css";
-// @ts-ignore
-import Header from "../../Components/Header/Header.tsx";
+import Header from "../../Components/Header/Header";
 import {useState} from "react";
-// @ts-ignore
-import FileItem from "../../Components/FileItem/FileItem.tsx";
+import FileExplorer from "../../Components/FileExplorer";
+import {IUser} from "../AuthPage/AuthPage";
 
-function MainPage() {
-    const [inputText, setInputText] = useState<string>('');
+interface IProfile {
+    profile: IUser,
+    setProfile: Dispatch<SetStateAction<object | null>>
+}
 
-    const list:any = [
-        'zxc', 'cxz', 'wer', 'lol', 'sfsdfsdfdsfs', 'dfd', 'sfddf', 'wrwerw',
-        'erterter', 'lortr', 'bvss', 'jgjgjg', '[[p[p[p', 'eers',
-        'ereqqqq', 'qqweqew', 'weqweqwe', 'qweqweqweqwe', 'yryryryryry'
+function MainPage({props}:any) {
+    const [inputText, setInputText] = useState<string>("");
+
+    const list: any = [
+        "zxc",
+        "cxz",
+        "wer",
     ];
 
-    const displayedList = list.filter((el:string) => {
-        if (inputText === '') {
+    const displayedList = list.filter((el: string) => {
+        if (inputText === "") {
             return el;
         } else {
             return el.toLowerCase().includes(inputText);
         }
-    })
+    });
+
+
+    const files = [
+        {
+            name: "documents",
+            type: "dir",
+        },
+        {
+            name: "file1.pdf",
+            type: "file"
+        },
+        {
+            name: "file2.doc",
+            type: "file"
+        },
+        {
+            name: "photos",
+            type: "dir",
+        },
+        {
+            name: "zxc.mp4",
+            type: "video",
+        },
+        {
+            name: "asuka.jpg",
+            type: "image",
+        },
+    ];
 
     return (
         <div>
-            <Header setInputText={setInputText} />
+            <Header setInputText={setInputText} props={props}/>
             <div className={styles.container}>
-                {
-                    displayedList.map((li:any, index:number) => (
-                        <FileItem key={index} item={li}/>
-                    ))
-                }
+                <FileExplorer data={files}/>
             </div>
         </div>
-    )
-
+    );
 }
 
 export default MainPage;

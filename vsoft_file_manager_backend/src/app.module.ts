@@ -34,4 +34,10 @@ import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
   ],
   providers: [],
 })
-export class AppModule {}
+export class AppModule {
+    configure(consumer: any) {
+        const app = express();
+        app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+        consumer(app);
+    }
+}

@@ -1,10 +1,11 @@
 .container {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     background-color: rgba(255, 255, 255, 0.09);
-    min-height: 70vh;
+    min-height: 55vh;
     margin: 30px 90px;
     padding: 30px;
+    border-radius: 20px;
 }
