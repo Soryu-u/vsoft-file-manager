@@ -11,7 +11,7 @@ import folder from "../../Images/folder.png";
 // @ts-ignore
 import dots from "../../Images/dots.png";
 
-function FileItem({item}:any) {
+function FileItem({item, deleteFile}:any) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     function imageType() {
@@ -25,6 +25,12 @@ function FileItem({item}:any) {
             return video;
         }
     }
+
+    function removeFile(e:any) {
+        deleteFile(e);
+        setIsOpen(false);
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -36,7 +42,7 @@ function FileItem({item}:any) {
             </div>
             { isOpen && <ul className={styles.dropdown}>
                 <li>Edit</li>
-                <li>Delete</li>
+                <li id={item.id + '*' + item.type + '*' + item.name} onClick={(e) => removeFile(e)}>Delete</li>
             </ul>}
         </div>
     )

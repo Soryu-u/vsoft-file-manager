@@ -32,26 +32,32 @@ function MainPage({props}:any) {
         {
             name: "documents",
             type: "dir",
+            id: '1'
         },
         {
             name: "file1.pdf",
-            type: "file"
+            type: "file",
+            id: '2'
         },
         {
             name: "file2.doc",
-            type: "file"
+            type: "file",
+            id: '2'
         },
         {
             name: "photos",
             type: "dir",
+            id: '3'
         },
         {
             name: "zxc.mp4",
             type: "video",
+            id: '4'
         },
         {
             name: "asuka.jpg",
             type: "image",
+            id: '5'
         },
     ];
 

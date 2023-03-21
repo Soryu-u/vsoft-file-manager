@@ -1,2 +1,19 @@
 .main {
 }
+
+.common_btn {
+    border-radius: 5px;
+    padding: 10px 40px;
+
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.common_btn:hover {
+    filter: brightness(90%);
+}
+
+.red_btn {
+    background-color: #ff7777;
+}
