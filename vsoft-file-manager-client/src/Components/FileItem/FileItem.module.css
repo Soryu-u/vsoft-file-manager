@@ -8,6 +8,7 @@
     color: black;
     margin: 30px;
     border-radius: 10px;
+    position: relative;
 }
 
 .header {
@@ -16,13 +17,40 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-
+    border-radius: 10px;
     font-size: 18px;
 }
 
 .image {
     width: 30px;
     height: 30px;
+}
+
+.dropdown {
+    z-index: 2;
+    position: absolute;
+    width: 100px;
+    right: 0;
+    top: 20px;
+    background-color: aliceblue;
+    border-radius: 10px;
+    list-style: none;
+    padding: 0;
+
+    box-shadow: 0px 1px 3px #5e5e5e9c;
+}
+
+.dropdown > li {
+    margin: 10px 0;
+    padding: 5px 20px;
+    cursor: pointer;
+}
+.dropdown > li:last-child {
+    color: red;
+}
+
+.dropdown > li:hover {
+    background-color: #e0e8ef;
 }
 
 .menu {
@@ -36,7 +64,7 @@
     background-color: #cfd5de;
 }
 
-.container:hover {
+.header:hover {
     background-color: #e0e8ef;
     cursor: default;
 }

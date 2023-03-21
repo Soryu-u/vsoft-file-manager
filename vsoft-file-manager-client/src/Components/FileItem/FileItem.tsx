@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import styles from "./FileItem.module.css";
 // @ts-ignore
 import video from "../../Images/video.png";
@@ -12,6 +12,8 @@ import folder from "../../Images/folder.png";
 import dots from "../../Images/dots.png";
 
 function FileItem({item}:any) {
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
     function imageType() {
         if (item.type === 'dir') {
             return folder;
@@ -30,8 +32,12 @@ function FileItem({item}:any) {
                 <div>
                     {item.name}
                 </div>
-                <img className={styles.menu} src={dots} alt={'more'}/>
+                <img className={styles.menu} src={dots} alt={'more'} onClick={() => setIsOpen(!isOpen)}/>
             </div>
+            { isOpen && <ul className={styles.dropdown}>
+                <li>Edit</li>
+                <li>Delete</li>
+            </ul>}
         </div>
     )
 }
