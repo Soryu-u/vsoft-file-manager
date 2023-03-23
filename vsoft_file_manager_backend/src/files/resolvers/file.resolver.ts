@@ -20,6 +20,11 @@ export class FilesResolver {
         return this.filesService.findAllFolders();
     }
 
+    @Query(() => [File, Folder])
+    async filesInPath(@Args('path') path: string) {
+        return this.filesService.getFilesInPath(path);
+    }
+
     @Mutation(() => File)
     async uploadFile(
         @Args({ name: 'file', type: () => GraphQLUpload })

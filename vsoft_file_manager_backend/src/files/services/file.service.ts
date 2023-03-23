@@ -13,19 +13,28 @@ export class FilesService {
         private readonly folderRepository: Repository<Folder>,
     ) {}
 
+    async getFilesInPath(path: string): Promise<[File[], Folder[]]> {
+        const files = await this.fileRepository.find({where: {path}});
+        const folders = await this.folderRepository.find({where: {path}});
+        const res:any = []
+        res.push(files);
+        res.push(folders);
+        return res;
+    }
+
     async createFile(file: File): Promise<File> {
-        return this.fileRepository.save(file);
+        return await this.fileRepository.save(file);
     }
 
     async createFolder(folder: Folder): Promise<Folder> {
-        return this.folderRepository.save(folder);
+        return await this.folderRepository.save(folder);
     }
 
     async findAllFiles(): Promise<File[]> {
-        return this.fileRepository.find();
+        return await this.fileRepository.find();
     }
 
     async findAllFolders(): Promise<Folder[]> {
-        return this.folderRepository.find();
+        return await this.folderRepository.find();
     }
 }
