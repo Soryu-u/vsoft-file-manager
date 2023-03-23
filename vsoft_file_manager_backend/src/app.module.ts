@@ -4,6 +4,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import { UsersModule } from './users/users.module';
 import {GraphQLModule} from "@nestjs/graphql";
 import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
+import {FilesModule} from "./files/files.module";
 
 @Module({
   imports: [
@@ -31,13 +32,9 @@ import {ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
         }),
       }),
       UsersModule,
+      FilesModule,
   ],
   providers: [],
 })
 export class AppModule {
-    configure(consumer: any) {
-        const app = express();
-        app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
-        consumer(app);
-    }
 }

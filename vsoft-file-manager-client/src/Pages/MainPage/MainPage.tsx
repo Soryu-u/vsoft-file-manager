@@ -65,7 +65,7 @@ function MainPage({props}:any) {
         <div>
             <Header setInputText={setInputText} props={props}/>
             <div className={styles.container}>
-                <FileExplorer data={files}/>
+                <FileExplorer datas={files}/>
             </div>
         </div>
     );
