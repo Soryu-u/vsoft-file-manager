@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./FileExplorer.module.css";
 import FileItem from "./FileItem/FileItem";
 import DeleteModal from "./modal/DeleteModal/DeleteModal";
-// import EditModal from "./modal/EditModal/EditModal";
-import { useQuery } from '@apollo/client';
-import { gql } from '@apollo/client';
+import EditModal from "./modal/EditModal/EditModal";
+import { useQuery, gql } from '@apollo/client';
+import UploadModal from "./modal/UploadModal/UploadModal";
 
 
 const GET_ALL_FILES = gql`
@@ -37,10 +37,9 @@ function FileExplorer({datas}:FileExplorerProps) {
     const [files, setFiles] = useState<File[]>([]);
     const [folders, setFolders] = useState<File[]>([]);
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
+    const [editModal, setEditModal] = useState<boolean>(false);
+    const [uploadModal, setUploadModal] = useState<boolean>(true);
     const [fileId, setFileId] = useState<string>('');
-
-
-    const { loading, error, data } = useQuery(GET_ALL_FILES);
 
     useEffect(() => {
         return () => {
@@ -58,11 +57,14 @@ function FileExplorer({datas}:FileExplorerProps) {
         };
     }, [datas]);
 
-    console.log(data)
-
     function deleteFile(e: any) {
-        setFileId(e.target.id);
+        setFileId(e.target.parentElement.id);
         setDeleteModal(true);
+    }
+
+    function editFile(e: any) {
+        setFileId(e.target.parentElement.id);
+        setEditModal(true);
     }
 
     function handleFolderClick(item:any) {
@@ -83,10 +85,11 @@ function FileExplorer({datas}:FileExplorerProps) {
                         {folders.map((item:any, index:number) => {
                             return (
                                 <div key={index} onClick={() => handleFolderClick(item)}>
-                                    <FileItem item={item} deleteFile={deleteFile}/>
+                                    <FileItem item={item} deleteFile={deleteFile} editFile={editFile}/>
                                 </div>
                             );
                         })}
+                        <button>Create</button>
                     </div>
                 </div>
                 <div>
@@ -95,16 +98,23 @@ function FileExplorer({datas}:FileExplorerProps) {
                         {files.map((item:any, index:number) => {
                             return (
                                 <div key={index}>
-                                    <FileItem item={item} deleteFile={deleteFile}/>
+                                    <FileItem item={item} deleteFile={deleteFile} editFile={editFile}/>
                                 </div>
                             );
                         })}
+                        <button onClick={() => setUploadModal(true)}>Upload</button>
                     </div>
                 </div>
 
 
                 {
                     deleteModal && <DeleteModal setDeleteModal={setDeleteModal} fileId={fileId}/>
+                }
+                {
+                    editModal && <EditModal setEditModal={setEditModal} fileId={fileId}/>
+                }
+                {
+                    uploadModal && <UploadModal setUploadModal={setUploadModal}/>
                 }
             </>
         );

@@ -11,7 +11,7 @@ import folder from "../../Images/folder.png";
 // @ts-ignore
 import dots from "../../Images/dots.png";
 
-function FileItem({item, deleteFile}:any) {
+function FileItem({item, deleteFile, editFile}:any) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     function imageType() {
@@ -31,6 +31,11 @@ function FileItem({item, deleteFile}:any) {
         setIsOpen(false);
     }
 
+    function edit(e:any) {
+        editFile(e);
+        setIsOpen(false);
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
@@ -40,9 +45,9 @@ function FileItem({item, deleteFile}:any) {
                 </div>
                 <img className={styles.menu} src={dots} alt={'more'} onClick={() => setIsOpen(!isOpen)}/>
             </div>
-            { isOpen && <ul className={styles.dropdown}>
-                <li>Edit</li>
-                <li id={item.id + '*' + item.type + '*' + item.name} onClick={(e) => removeFile(e)}>Delete</li>
+            { isOpen && <ul id={item.id + '*' + item.type + '*' + item.name} className={styles.dropdown}>
+                <li onClick={(e) => edit(e)}>Edit</li>
+                <li onClick={(e) => removeFile(e)}>Delete</li>
             </ul>}
         </div>
     )
