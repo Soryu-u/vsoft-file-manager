@@ -3,25 +3,9 @@ import styles from "./FileExplorer.module.css";
 import FileItem from "./FileItem/FileItem";
 import DeleteModal from "./modal/DeleteModal/DeleteModal";
 import EditModal from "./modal/EditModal/EditModal";
-import { useQuery, gql } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import UploadModal from "./modal/UploadModal/UploadModal";
-
-
-const GET_ALL_FILES = gql`
-    query GetAllFiles {
-        files {
-            id
-            name
-            type
-            public
-            path
-            folder {
-                id
-                name
-            }
-        }
-    }
-`;
+import {CREATE_FOLDER, GET_ALL_FILES, GET_FOLDERS_ID} from "../utils/apollo";
 
 export interface File {
     name: string;
@@ -29,33 +13,31 @@ export interface File {
     id: string,
 }
 
-interface FileExplorerProps {
-    datas: File[];
-}
-
-function FileExplorer({datas}:FileExplorerProps) {
+function FileExplorer({profile}:any) {
+    const mainId = `0${profile.id}`
     const [files, setFiles] = useState<File[]>([]);
     const [folders, setFolders] = useState<File[]>([]);
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
-    const [uploadModal, setUploadModal] = useState<boolean>(true);
+    const [uploadModal, setUploadModal] = useState<boolean>(false);
     const [fileId, setFileId] = useState<string>('');
+    const [parentId, setParentId] = useState(mainId)
+    const [path, setPath] = useState([{id: mainId, name: "Home"}]);
+
+    const getFolders = useQuery(GET_FOLDERS_ID, {
+        variables: { parent: parentId },
+    });
+    const getFiles = useQuery(GET_ALL_FILES);
+    const [createFolder] = useMutation(CREATE_FOLDER);
 
     useEffect(() => {
-        return () => {
-            let a:any[] = []
-            let b:any[] =[]
-            datas.filter(el => {
-                if (el.type === 'dir') {
-                    a.push(el)
-                } else {
-                    b.push(el)
-                }
-            })
-            setFiles(b)
-            setFolders(a)
-        };
-    }, [datas]);
+        if(getFolders.data) {
+            setFolders(getFolders.data.foldersId);
+        }
+        if (getFiles.data) {
+            setFiles(getFiles.data.files)
+        }
+    }, [getFolders, getFiles])
 
     function deleteFile(e: any) {
         setFileId(e.target.parentElement.id);
@@ -67,29 +49,51 @@ function FileExplorer({datas}:FileExplorerProps) {
         setEditModal(true);
     }
 
+    function newFolder(parentId: string | undefined) {
+        createFolder({
+            variables: {
+                name: "Папка",
+                parentId: parentId
+            },
+            refetchQueries: [{ query: GET_FOLDERS_ID, variables: { parent: parentId } }],
+        });
+    }
     function handleFolderClick(item:any) {
-
+        setPath([...path, {id: item.id, name: item.name}]);
+        setParentId(item.id);
+    }
+    function handleFileClick(item:any) {
+        console.log(item)
+    }
+    function handlePathClick(id:string) {
+        const index = path.findIndex(item => item.id === id);
+        if (index !== -1) {
+            setPath(path.slice(0, index + 1));
+        }
+        setParentId(id);
     }
 
     const getCurrentFolderContent = () => {
         return (
             <>
                 <div className={styles.path}>
-                    <div className={styles.pathItem}>
-                        Home
-                    </div>
+                    {path.map((item, index) => {
+                        return (
+                            <div key={index} className={styles.pathItem} onClick={() => handlePathClick(item.id)}>
+                                {item.name}/
+                            </div>
+                        );
+                    })}
                 </div>
                 <div>
                     Folders
                     <div className={styles.items}>
                         {folders.map((item:any, index:number) => {
                             return (
-                                <div key={index} onClick={() => handleFolderClick(item)}>
-                                    <FileItem item={item} deleteFile={deleteFile} editFile={editFile}/>
-                                </div>
+                                <FileItem key={index} item={item} openItem={handleFolderClick} deleteFile={deleteFile} editFile={editFile}/>
                             );
                         })}
-                        <button>Create</button>
+                        <button onClick={() => newFolder(parentId)}>Create</button>
                     </div>
                 </div>
                 <div>
@@ -97,9 +101,7 @@ function FileExplorer({datas}:FileExplorerProps) {
                     <div className={styles.items}>
                         {files.map((item:any, index:number) => {
                             return (
-                                <div key={index}>
-                                    <FileItem item={item} deleteFile={deleteFile} editFile={editFile}/>
-                                </div>
+                                    <FileItem key={index} item={item} openItem={handleFileClick} deleteFile={deleteFile} editFile={editFile}/>
                             );
                         })}
                         <button onClick={() => setUploadModal(true)}>Upload</button>
@@ -108,7 +110,7 @@ function FileExplorer({datas}:FileExplorerProps) {
 
 
                 {
-                    deleteModal && <DeleteModal setDeleteModal={setDeleteModal} fileId={fileId}/>
+                    deleteModal && <DeleteModal setDeleteModal={setDeleteModal} fileId={fileId} parent={parentId}/>
                 }
                 {
                     editModal && <EditModal setEditModal={setEditModal} fileId={fileId}/>

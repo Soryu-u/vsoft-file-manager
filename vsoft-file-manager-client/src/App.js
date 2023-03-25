@@ -5,9 +5,7 @@ import styles from "./App.module.css";
 
 function App() {
     const [profile, setProfile] = useState();
-    const isAuth = profile ? true : false;
-    // const isAuth = true;
-
+    const isAuth = !!profile;
 
     return (
         <div className={styles.main}>

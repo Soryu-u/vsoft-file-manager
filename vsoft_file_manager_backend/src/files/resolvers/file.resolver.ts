@@ -19,10 +19,9 @@ export class FilesResolver {
     async folders(): Promise<Folder[]> {
         return this.filesService.findAllFolders();
     }
-
-    @Query(() => [File, Folder])
-    async filesInPath(@Args('path') path: string) {
-        return this.filesService.getFilesInPath(path);
+    @Query(() => [Folder])
+    async foldersId(@Args('parent') parent:string): Promise<Folder[]> {
+        return this.filesService.findAllFoldersID(parent);
     }
 
     @Mutation(() => File)
@@ -42,10 +41,7 @@ export class FilesResolver {
                     file.name = filename;
                     file.type = 'image/jpeg';
                     file.public = isPublic;
-                    file.path = path;
-                    if (folderId) {
-                        file.folder = { id: folderId } as Folder;
-                    }
+                    file.parent = folderId;
                     resolve(this.filesService.createFile(file));
                 })
                 .on('error', reject),
@@ -55,13 +51,19 @@ export class FilesResolver {
     @Mutation(() => Folder)
     async createFolder(
         @Args('name') name: string,
-        @Args('parentId', { nullable: true }) parentId?: number,
+        @Args('parentId', { nullable: true }) parentId?: string,
     ): Promise<Folder> {
         const folder = new Folder();
         folder.name = name;
-        if (parentId) {
-            folder.parent = { id: parentId } as Folder;
-        }
+        folder.type = "dir";
+        folder.parent = parentId;
         return this.filesService.createFolder(folder);
     }
+
+    @Mutation(() => Boolean)
+    async deleteFolder(@Args('id') id: number): Promise<boolean> {
+        await this.filesService.deleteFolder(id);
+        return true;
+    }
+
 }

@@ -1,9 +1,8 @@
 import * as React from "react";
-import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import styles from "./AuthPage.module.css";
-import {googleLogout, useGoogleLogin} from "@react-oauth/google";
+import {useGoogleLogin} from "@react-oauth/google";
 import axios from "axios";
-import instance from "../../utils/axios";
 
 export interface IUser {
     email?: string,
@@ -31,6 +30,7 @@ function AuthPage({setProfile}:any) {
                 query: `
         mutation {
           createUser(createUser: {email: "${email}"}) {
+            id
             email
           }
         }
@@ -57,15 +57,16 @@ function AuthPage({setProfile}:any) {
                         }
                     })
                     .then((res) => {
-                        setProfile(res.data);
                         createUser(res.data.email)
-                            .then(r => console.log(r))
+                            .then((res) =>
+                                setProfile(res)
+                            )
                             .catch((e) => console.log(e));
                     })
                     .catch((err) => console.log(err));
             }
         },
-        [user]
+        [setProfile, user]
     );
 
     return (

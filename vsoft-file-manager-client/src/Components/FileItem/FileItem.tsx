@@ -11,7 +11,7 @@ import folder from "../../Images/folder.png";
 // @ts-ignore
 import dots from "../../Images/dots.png";
 
-function FileItem({item, deleteFile, editFile}:any) {
+function FileItem({openItem, item, deleteFile, editFile}:any) {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     function imageType() {
@@ -40,7 +40,7 @@ function FileItem({item, deleteFile, editFile}:any) {
         <div className={styles.container}>
             <div className={styles.header}>
                 <img className={styles.image} src={imageType()} alt={item.type}/>
-                <div>
+                <div onClick={() => openItem(item)}>
                     {item.name}
                 </div>
                 <img className={styles.menu} src={dots} alt={'more'} onClick={() => setIsOpen(!isOpen)}/>

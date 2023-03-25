@@ -15,17 +15,9 @@ export class Folder {
 
     @Field()
     @Column()
-    path: string;
+    type: string;
 
-    @Field(() => Folder)
-    @ManyToOne(() => Folder, (folder) => folder.children)
-    parent: Folder;
-
-    @Field(() => Folder)
-    @OneToMany(() => Folder, (folder) => folder.parent)
-    children: Folder[];
-
-    @Field(() => File)
-    @OneToMany(() => File, (file) => file.folder)
-    files: File[];
+    @Field()
+    @Column()
+    parent: string;
 }

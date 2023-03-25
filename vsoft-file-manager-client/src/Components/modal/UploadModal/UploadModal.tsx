@@ -36,7 +36,8 @@ function UploadModal({setUploadModal}:any) {
         const endpoint = 'http://localhost:5000/graphql'; // ваша адреса сервера GraphQL
         const client = new GraphQLClient(endpoint, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`, // ваш токен авторизації
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'Apollo-Require-Preflight': 'true',
             },
         });
 
@@ -57,13 +58,10 @@ function UploadModal({setUploadModal}:any) {
       }
     }
   `;
-
-        // Відправляємо запит на сервер
         try {
             const data = await client.request(query, { files });
-
-            // Очищаємо вибрані файли
             setSelectedFiles([]);
+            console.log(data)
         } catch (error) {
             console.error(error);
         }

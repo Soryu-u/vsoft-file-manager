@@ -23,9 +23,5 @@ export class File {
 
     @Field()
     @Column()
-    path: string;
-
-    @Field(() => Folder)
-    @ManyToOne(() => Folder, (folder) => folder.files)
-    folder: Folder;
+    parent: number;
 }

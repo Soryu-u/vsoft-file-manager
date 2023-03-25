@@ -13,15 +13,6 @@ export class FilesService {
         private readonly folderRepository: Repository<Folder>,
     ) {}
 
-    async getFilesInPath(path: string): Promise<[File[], Folder[]]> {
-        const files = await this.fileRepository.find({where: {path}});
-        const folders = await this.folderRepository.find({where: {path}});
-        const res:any = []
-        res.push(files);
-        res.push(folders);
-        return res;
-    }
-
     async createFile(file: File): Promise<File> {
         return await this.fileRepository.save(file);
     }
@@ -36,5 +27,20 @@ export class FilesService {
 
     async findAllFolders(): Promise<Folder[]> {
         return await this.folderRepository.find();
+    }
+    async findAllFoldersID(parent:string): Promise<Folder[]> {
+        return await this.folderRepository.find({where: { parent }});
+    }
+
+    async deleteFolder(id: number): Promise<void> {
+        const folder = await this.folderRepository.findOne({where: {id}});
+        if (!folder) {
+            throw new Error(`Folder with id ${id} not found`);
+        }
+        // await Promise.all([
+        //     this.folderRepository.remove(folder.children),
+        //     this.fileRepository.remove(folder.files),
+        // ]);
+        await this.folderRepository.remove(folder);
     }
 }
