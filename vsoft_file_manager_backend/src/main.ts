@@ -8,7 +8,7 @@ async function bootstrap() {
   const config = await app.get(ConfigService);
   const port = config.get<number>('API_PORT');
   const corsOptions: CorsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost',
   };
   app.enableCors(corsOptions);
 

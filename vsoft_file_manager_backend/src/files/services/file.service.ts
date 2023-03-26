@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import {Any, ILike, Repository} from 'typeorm';
 import {File} from "../entities/file.entity";
 import {Folder} from "../entities/folder.entity";
 
@@ -34,13 +34,15 @@ export class FilesService {
 
     async deleteFolder(id: number): Promise<void> {
         const folder = await this.folderRepository.findOne({where: {id}});
+        const folderChildren = await this.folderRepository.find({where: {parent: id.toString()}})
+        const fileChildren = await this.fileRepository.find({where: {parent: id.toString()}})
         if (!folder) {
             throw new Error(`Folder with id ${id} not found`);
         }
-        // await Promise.all([
-        //     this.folderRepository.remove(folder.children),
-        //     this.fileRepository.remove(folder.files),
-        // ]);
+        await Promise.all([
+            this.folderRepository.remove(folderChildren),
+            this.fileRepository.remove(fileChildren),
+        ]);
         await this.folderRepository.remove(folder);
     }
 }

@@ -72,10 +72,8 @@ function AuthPage({setProfile}:any) {
     return (
         <div className={styles.wrapper}>
             <div className={styles.main}>
-                    <div>
                         <h1>Login with Google</h1>
-                        <button onClick={() => login()}>login</button>
-                    </div>
+                        <button className={styles.login_btn} onClick={() => login()}>Login</button>
             </div>
         </div>
     );

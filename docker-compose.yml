@@ -32,3 +32,10 @@ services:
       - TYPEORM_DATABASE=${TYPEORM_DATABASE}
       - TYPEORM_PORT=${TYPEORM_PORT}
       - TYPEORM_HOST=db
+  client:
+    container_name: client-service
+    build:
+      context: ./vsoft-file-manager-client
+    restart: unless-stopped
+    ports:
+      - "80:80"

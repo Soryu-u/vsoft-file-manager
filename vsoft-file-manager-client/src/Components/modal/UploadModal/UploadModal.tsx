@@ -2,23 +2,23 @@ import React, { useState, useCallback } from "react";
 import styles from "./UploadModal.module.css";
 import buttons from "../../../App.module.css";
 import { useDropzone } from "react-dropzone";
-import { GraphQLClient } from 'graphql-request';
+import {UPLOAD_FILE} from "../../../utils/apollo";
+import {useMutation} from "@apollo/client";
 
 interface SelectedFile {
     file: File;
-    public: boolean;
 }
 
-function UploadModal({setUploadModal}:any) {
+function UploadModal({setUploadModal, profile}:any) {
     const [selectedFiles, setSelectedFiles] = useState<SelectedFile[]>([]);
     const [publicFile, setPublicFile] = useState(false);
+    const [uploadFile] = useMutation(UPLOAD_FILE);
 
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles && acceptedFiles.length > 0) {
-            const newFiles = acceptedFiles.map((file) => ({
-                file,
-                public: publicFile,
-            }));
+            const newFiles = acceptedFiles.map((file) => (
+                {file}
+            ));
             setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
         }
     }, [publicFile]);
@@ -33,38 +33,25 @@ function UploadModal({setUploadModal}:any) {
 
 
     const handleSaveChanges = async () => {
-        const endpoint = 'http://localhost:5000/graphql'; // ваша адреса сервера GraphQL
-        const client = new GraphQLClient(endpoint, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Apollo-Require-Preflight': 'true',
-            },
-        });
+        const formData = new FormData();
+        const file = selectedFiles[0].file;
+        const author = profile.email;
+        const isPublic = publicFile;
+        formData.append('file', selectedFiles[0].file);
+        formData.append('author', author);
+        formData.append('isPublic', isPublic.toString());
 
-        // Створюємо масив об'єктів з вибраними файлами та їх публічністю
-        const files = selectedFiles.map((file) => ({
-            author: 'email',
-            file: file.file,
-            public: file.public,
-        }));
+        console.log(formData);
 
-        // Створюємо GraphQL запит, який відправляє файли на сервер
-        const query = `
-    mutation UploadFiles($files: [UploadFile!]!) {
-      uploadFiles(files: $files) {
-        author
-        id
-        public
-      }
-    }
-  `;
-        try {
-            const data = await client.request(query, { files });
-            setSelectedFiles([]);
-            console.log(data)
-        } catch (error) {
-            console.error(error);
-        }
+        uploadFile({ variables: { file: { value: formData, filename: file.name }, author, isPublic } })
+            .then((result) => {
+                console.log('File uploaded:', result.data.uploadFile);
+            })
+            .catch((error) => {
+                console.error('File upload failed:', error);
+            });
+        setSelectedFiles([]);
+        setUploadModal(false);
     };
 
     return (

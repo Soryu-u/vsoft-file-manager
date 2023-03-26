@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
-import { File } from './file.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import {Field, ID, ObjectType} from "@nestjs/graphql";
 
 @Entity()
@@ -11,6 +10,10 @@ export class Folder {
 
     @Field()
     @Column()
+    author: string;
+
+    @Field()
+    @Column()
     name: string;
 
     @Field()
@@ -19,5 +22,13 @@ export class Folder {
 
     @Field()
     @Column()
+    isPublic: boolean;
+
+    @Field()
+    @Column()
     parent: string;
+
+    @Field(() => [String], { nullable: true })
+    @Column('text', { array: true, nullable: true })
+    users?: string[] | null;
 }

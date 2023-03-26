@@ -16,3 +16,17 @@
     border-radius: 10px;
     border: 1px #252525 solid;
 }
+
+.login_btn {
+    width: max-content;
+
+    padding: 10px 40px;
+    align-self: center;
+    margin-top: 50px;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    border-radius: 10px;
+    cursor: pointer;
+}

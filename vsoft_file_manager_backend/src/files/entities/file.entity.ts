@@ -1,5 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Folder } from './folder.entity';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import {Field, ID, ObjectType} from "@nestjs/graphql";
 
 @Entity()
@@ -11,17 +10,38 @@ export class File {
 
     @Field()
     @Column()
-    name: string;
+    filename: string;
 
     @Field()
     @Column()
-    type: string;
+    mimetype: string;
 
     @Field()
     @Column()
-    public: boolean;
+    encoding: string;
 
     @Field()
     @Column()
-    parent: number;
+    url: string;
+
+    @Field()
+    @Column()
+    author: string;
+
+    @Field()
+    @Column()
+    isPublic: boolean;
+
+    @Field()
+    @Column()
+    parent: string;
+
+    @Field()
+    @Column()
+    path: string;
+
+    @Field(() => [String], { nullable: true })
+    @Column('text', { array: true, nullable: true })
+    users?: string[] | null;
+
 }

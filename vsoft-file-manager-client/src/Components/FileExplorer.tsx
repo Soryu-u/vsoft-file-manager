@@ -3,9 +3,12 @@ import styles from "./FileExplorer.module.css";
 import FileItem from "./FileItem/FileItem";
 import DeleteModal from "./modal/DeleteModal/DeleteModal";
 import EditModal from "./modal/EditModal/EditModal";
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import UploadModal from "./modal/UploadModal/UploadModal";
-import {CREATE_FOLDER, GET_ALL_FILES, GET_FOLDERS_ID} from "../utils/apollo";
+import {GET_ALL_FILES, GET_FOLDERS_ID} from "../utils/apollo";
+import CreateFolder from "./modal/CreateItem/CreateFolder";
+// @ts-ignore
+import plus from "../Images/plus.png";
 
 export interface File {
     name: string;
@@ -20,15 +23,15 @@ function FileExplorer({profile}:any) {
     const [deleteModal, setDeleteModal] = useState<boolean>(false);
     const [editModal, setEditModal] = useState<boolean>(false);
     const [uploadModal, setUploadModal] = useState<boolean>(false);
+    const [createModal, setCreateModal] = useState<boolean>(false);
     const [fileId, setFileId] = useState<string>('');
     const [parentId, setParentId] = useState(mainId)
     const [path, setPath] = useState([{id: mainId, name: "Home"}]);
 
     const getFolders = useQuery(GET_FOLDERS_ID, {
-        variables: { parent: parentId },
+        variables: { parent: parentId},
     });
     const getFiles = useQuery(GET_ALL_FILES);
-    const [createFolder] = useMutation(CREATE_FOLDER);
 
     useEffect(() => {
         if(getFolders.data) {
@@ -49,15 +52,6 @@ function FileExplorer({profile}:any) {
         setEditModal(true);
     }
 
-    function newFolder(parentId: string | undefined) {
-        createFolder({
-            variables: {
-                name: "Папка",
-                parentId: parentId
-            },
-            refetchQueries: [{ query: GET_FOLDERS_ID, variables: { parent: parentId } }],
-        });
-    }
     function handleFolderClick(item:any) {
         setPath([...path, {id: item.id, name: item.name}]);
         setParentId(item.id);
@@ -90,10 +84,10 @@ function FileExplorer({profile}:any) {
                     <div className={styles.items}>
                         {folders.map((item:any, index:number) => {
                             return (
-                                <FileItem key={index} item={item} openItem={handleFolderClick} deleteFile={deleteFile} editFile={editFile}/>
+                                <FileItem key={index} item={item} profile={profile} openItem={handleFolderClick} deleteFile={deleteFile} editFile={editFile}/>
                             );
                         })}
-                        <button onClick={() => newFolder(parentId)}>Create</button>
+                        <img className={styles.addBtn} src={plus} alt={'add new'} onClick={() => setCreateModal(true)}/>
                     </div>
                 </div>
                 <div>
@@ -101,10 +95,10 @@ function FileExplorer({profile}:any) {
                     <div className={styles.items}>
                         {files.map((item:any, index:number) => {
                             return (
-                                    <FileItem key={index} item={item} openItem={handleFileClick} deleteFile={deleteFile} editFile={editFile}/>
+                                    <FileItem key={index} item={item} profile={profile}  openItem={handleFileClick} deleteFile={deleteFile} editFile={editFile}/>
                             );
                         })}
-                        <button onClick={() => setUploadModal(true)}>Upload</button>
+                        <img className={styles.addBtn} src={plus} alt={'add new'} onClick={() => setUploadModal(true)}/>
                     </div>
                 </div>
 
@@ -116,7 +110,10 @@ function FileExplorer({profile}:any) {
                     editModal && <EditModal setEditModal={setEditModal} fileId={fileId}/>
                 }
                 {
-                    uploadModal && <UploadModal setUploadModal={setUploadModal}/>
+                    uploadModal && <UploadModal setUploadModal={setUploadModal} profile={profile}/>
+                }
+                {
+                    createModal && <CreateFolder setCreateModal={setCreateModal} parentId={parentId} profile={profile}/>
                 }
             </>
         );
